@@ -29,12 +29,12 @@ The general syntax for using the app is:
 
 + Add a new TODO item:
    
-   `./todo new "Buy groceries"`
+   `./todo create "Buy groceries"`
    
 
 + Rename a TODO item:
    
-   `./todo saveas "Buy groceries" "Purchase food items"`
+   `./todo update "Buy groceries" "Purchase food items"`
    
 
 + Delete a TODO item:
@@ -49,8 +49,8 @@ The general syntax for using the app is:
 
 ## Getting Started
 
-+ Clone this repository
-+ Make sure you have the necessary permissions to execute the script
++ Clone this repository `git clone https://github.com/THARUN13055/todo.git`
++ Build the application using `go build todo.go`
 + Run the app using the syntax described above
 
 Happy organizing!
