@@ -1,6 +1,8 @@
-package createhelp
+package create
 
-func CreateHelp(){
+import "fmt"
+
+func CreateHelp() {
 
 	createHelp := `
 
@@ -10,5 +12,5 @@ func CreateHelp(){
 	  -- create "This is first task" --discription or -d "Here we need to bref about it"
 	`
 
-	fmt.Println(createhelp)
+	fmt.Println(createHelp)
 }

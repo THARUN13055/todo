@@ -2,8 +2,8 @@ package help
 
 import "fmt"
 
-func Help(){
-    helpText := `
+func Help() {
+	helpText := `
 # Command Line TODO App
 
 This is a simple CLI based Todo application using GO for managing your TODO list.
@@ -28,5 +28,5 @@ Examples:
 
 Use "todo help" for more information about a command.
 `
-    fmt.Println(helpText)
+	fmt.Println(helpText)
 }

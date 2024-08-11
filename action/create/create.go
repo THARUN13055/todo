@@ -5,8 +5,6 @@ import (
 	"fmt"
 	"log"
 	"os"
-
-	createfile "github.com/tharun13055/golang/todo/action/create"
 )
 
 type storescreate struct {
@@ -16,48 +14,64 @@ type storescreate struct {
 }
 
 func Create() {
-	// Create the file and Header
-	createfile.CreateFile()
-
 	// Check if the necessary arguments are provided
 	if len(os.Args) <= 2 {
 		fmt.Println("Create your own text :)")
-		createfile.createHelp()
+		CreateHelp()
 		os.Exit(1)
 	}
 
 	// Initialize the struct
 	var storecreate storescreate
-	storecreate.Header = os.Args[3]
-	storecreate.Description = os.Args[5]
-	storecreate.Duration = os.Args[7]
 
-	// Check if Header (Topic) is provided
+	//Parse the command line args
+
+	for i := 1; i < len(os.Args); i++ {
+		switch os.Args[i] {
+		case "--create", "-c":
+			if i+1 < len(os.Args) {
+				storecreate.Header = os.Args[i+1]
+				i++
+			}
+		case "-d", "--description":
+			if i+1 < len(os.Args) {
+				storecreate.Description = os.Args[i+1]
+				i++
+			}
+		case "-t", "--time":
+			if i+1 < len(os.Args) {
+				storecreate.Duration = os.Args[i+1]
+				i++
+			}
+
+		}
+
+	}
+
+	// Validate mandatory fields
 	if storecreate.Header == "" {
 		fmt.Println("Topic is Mandatory :)")
-		createfile.createHelp()
+		CreateHelp()
 		os.Exit(1)
 	}
 
-	// Check and set Description
-	if os.Args[4] == "-d" || os.Args[4] == "--description" {
-		if storecreate.Description == "" {
-			storecreate.Description = "Null"
-		}
+	// Set default values if fields are empty
+	if storecreate.Description == "" {
+		storecreate.Description = "Null"
 	}
-
-	// Check and set Duration
-	if os.Args[6] == "-t" || os.Args[6] == "--time" {
-		if storecreate.Duration == "" {
-			storecreate.Duration = "Null"
-		}
+	if storecreate.Duration == "" {
+		storecreate.Duration = "Null"
 	}
 
 	index := generateindex()
 
 	createonetask := []string{fmt.Sprint(index), storecreate.Header, storecreate.Description, storecreate.Duration}
 
-	// You can now use createonetask to write to the CSV file or perform other operations
+	csvwrite := csv.Writer() // Here we need to add our created file
+	for _,emptyrow := range createonetask {
+		_ = csvwrite.Write(emptyrow)
+	}
+	csvwrite.Flush()
 }
 
 // Function to generate index

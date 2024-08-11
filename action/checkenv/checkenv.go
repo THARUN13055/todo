@@ -1,23 +1,28 @@
-package createfile
+package checkenv
 
 import (
+	"encoding/csv"
 	"log"
 	"os"
-	"encoding/csv"
 )
 
 func CreateFile() {
 	// Check if the data.csv file exists.
-	if fileExists("data.csv") {
+	filenameed := "data.csv"
+	if fileExists(filenameed) {
 		log.Println("File is already there")
 	} else {
-		file, err := os.Create("data.csv")
+		file, err := os.Create(filenameed)
 		if err != nil {
 			log.Fatal(err)
 		}
-		writeHeader()
 		defer file.Close()
+
+		writeHeading(file)
+
+		
 	}
+
 }
 
 func fileExists(filename string) bool {
@@ -25,15 +30,14 @@ func fileExists(filename string) bool {
 	return err == nil
 }
 
-
-func writeHeader(){
+func writeHeading(file *os.File) {
 	// Create a new CSV writer
 	writer := csv.NewWriter(file)
 	defer writer.Flush()
 
 	// Write the header to the CSV file
 	heading := []string{"Id", "Heading", "Description", "Duration"}
-	err = writer.Write(heading)
+	err := writer.Write(heading)
 	if err != nil {
 		log.Fatal(err)
 	}
