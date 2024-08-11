@@ -9,9 +9,7 @@ import (
 func CreateFile() {
 	// Check if the data.csv file exists.
 	filenameed := "data.csv"
-	if fileExists(filenameed) {
-		log.Println("File is already there")
-	} else {
+	if !fileExists(filenameed) {
 		file, err := os.Create(filenameed)
 		if err != nil {
 			log.Fatal(err)
@@ -19,8 +17,6 @@ func CreateFile() {
 		defer file.Close()
 
 		writeHeading(file)
-
-		
 	}
 
 }

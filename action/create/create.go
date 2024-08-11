@@ -25,11 +25,10 @@ func Create() {
 	var storecreate storescreate
 
 	//Parse the command line args
-	fmt.Println("Getting data to store the todo...")
 
 	for i := 1; i < len(os.Args); i++ {
 		switch os.Args[i] {
-		case "--create", "-c":
+		case "-hd", "--heading":
 			if i+1 < len(os.Args) {
 				storecreate.Header = os.Args[i+1]
 				i++
@@ -44,7 +43,6 @@ func Create() {
 				storecreate.Duration = os.Args[i+1]
 				i++
 			}
-
 		}
 
 	}
@@ -66,11 +64,9 @@ func Create() {
 
 	index := generateindex()
 
-	createonetask := []string{fmt.Sprint(index), storecreate.Header, storecreate.Description, storecreate.Duration}	//[1, "fsdf", "fsdfs", "fsdfs"]
-	fmt.Printf("Storing data: %v\n", createonetask)
+	createonetask := []string{fmt.Sprint(index), storecreate.Header, storecreate.Description, storecreate.Duration}
 
-	file, err := os.OpenFile("data.csv", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0644)
-	log.Println("Opened data.csv file... ",err)
+	file, err := os.OpenFile("data.csv", os.O_CREATE|os.O_RDWR|os.O_APPEND, 0644)
 	if err != nil {
 		log.Fatal("Falied to open data.csv",err)
 	}
@@ -79,24 +75,14 @@ func Create() {
 
 	// Create a new CSV writer
 	writer := csv.NewWriter(file)
-	reader := csv.NewReader(file)
-
-	//Reading data.csv
-	log.Println("Reading from file, ", err)
-	recodrs, err := reader.ReadAll()
-	fmt.Println(recodrs)
 	err = writer.Write(createonetask)
-	log.Println("Writing to file, ", err)
 	if err != nil {
 		log.Fatal("Falied to write: ", err)
 	}
-	log.Println("Reading from file, ", err)
-	recodrs, err = reader.ReadAll()
-	fmt.Println(recodrs)
 
 	writer.Flush()
-	
-	log.Println("End of Create function... ", err)
+
+	fmt.Println("Todo added Successfully!!")
 }
 
 // Function to generate index

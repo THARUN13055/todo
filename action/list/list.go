@@ -7,45 +7,34 @@ import (
 	"os"
 )
 
-func list() {
-	value := os.Args[3]
-	if os.Args[1] == "--list" || os.Args[1] == "-t" {
-		f,err := os.Open("data.csv")
-		err != nil {
-			log.Println("The File has not been open",err)
-		}
-		defer f.Close()
-	
-		csvFileReader := csv.NewReader(f)
-		readallfile,err := csvFileReader.ReadAll()
-		if err != nil {
-			log.Fatal("Unable to parse file as CSV for ", err)
-		}
-	
-		fmt.Println(csvFileReader)
+func List() {
+	f,err := os.Open("data.csv")
+	if err != nil {
+		log.Fatal("The File has not been open",err)
+	}
+	defer f.Close()
+
+	csvFileReader := csv.NewReader(f)
+
+	//Reading the Header
+
+	header , err := csvFileReader.Read()
+	if err != nil {
+		log.Fatal("Error reading CSV header: ", err)
 	}
 
-	if os.Args[2] == "--key" || os.Args == "-k" {
-		f,err := os.Open("data.csv")
-		err != nil {
-			log.Fatal("The  error is in opening file specific read:->",err)
+	fmt.Println(header)
+
+	if len(os.Args) > 2 && (os.Args[2] == "--key" || os.Args[2] == "-k") {
+		value := os.Args[3]
+
+		if value == "" {
+			value = "Null"
 		}
-		defer f.Close()
-	
-		csvFileReader := csv.NewReader(f)
-
-		//Reading the Header
-
-		header , err := csvFileReader.Read()
-		if err != nil {
-			log.Fatal("Error reading CSV header: ", err)
-		}
-
-		fmt.Println(header)
 
 		for {
 			row , err := csvFileReader.Read()
-			err != nil {
+			if err != nil {
 				if err.Error() == "EOF" {
 					break
 				}
@@ -55,7 +44,18 @@ func list() {
 				fmt.Println(row)
 			}
 
-		} 
+		}
 	}
 
+	for {
+		row , err := csvFileReader.Read()
+		if err != nil {
+			if err.Error() == "EOF" {
+				break
+			}
+			log.Fatal("Error reading CSV row: ", err)
+		}
+		fmt.Println(row)
+
+	}
 }
